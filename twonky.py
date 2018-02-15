@@ -133,7 +133,6 @@ def browser(host, port, version):
                 elif var == "exit":
                         sys.exit()
 
-#*** Program start here ***
 if __name__ == '__main__':
         if len(sys.argv) != 3:
                 print "Usage: $ " + sys.argv[0] + " [IP_adress] [port]"
