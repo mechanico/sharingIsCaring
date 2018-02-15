@@ -1,7 +1,13 @@
 # sharingIsCaring
-Usage: $ twonky.py [IP Adress] [port]
+Usage: 
+
+```
+$ twonky.py [IP Adress] [port]
+```
 
 Example Usage:
+
+```
 $ python twonky.py XXX.XXX.XXX.XXX 9443
 https://www.shodan.io/host/XXX.XXX.XXX.XXX
 *** Port 9443 opened ***
@@ -75,3 +81,4 @@ path nr: 011/004
 001 Fil fwlog
 ------------------------------
 path nr: exit
+```
