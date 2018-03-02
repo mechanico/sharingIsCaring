@@ -1,5 +1,5 @@
 # sharingIsCaring
-Install:
+##Install:
 ```
 $ git clone https://github.com/mechanico/sharingIsCaring.git
 ```
@@ -13,7 +13,7 @@ $ sudo pip install -r requirements.txt
 ```
 You're ready to go!
 
-Usage: 
+##Usage: 
 
 ```
 $ twonky.py [IP Adress] [port]
