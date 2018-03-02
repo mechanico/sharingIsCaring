@@ -1,4 +1,19 @@
 # sharingIsCaring
+Install:
+Grab .git repository:
+```
+$ git clone https://github.com/mechanico/sharingIsCaring.git
+```
+Move into folder:
+```
+$ cd sharingIsCaring
+```
+Install dependicies:
+```
+$ sudo pip install -r requirements.txt
+```
+You're ready to go!
+
 Usage: 
 
 ```
@@ -46,25 +61,7 @@ path nr: 011
 001 Fil DavLock
 002 Fil ediskmap.map
 003 Fil fileye
-004 Dir fwupgrade
-005 Fil intern_disk.map
-006 Fil ipcs_info
-007 Fil job_queue_socket
-008 Fil LEDBlinkEnable
-009 Fil libzydb.lock
-010 Fil main_wsgi.sock
-011 Fil md_vg.map
-012 Fil need_thumbnail
-013 Fil nsu_progress
-014 Fil pylog
-015 Fil startup-config.conf
-016 Fil sto_log
-017 Fil stop_stunnel_client.log
-018 Dir tmpfs
-019 Fil twonkyserver-log.txt
-020 Fil ugs.log
-021 Dir upnp
-022 Dir users
+[...]
 023 Fil zyfw_dl.filetype
 024 Fil zyfw_dl.progress
 025 Fil zyfw_dl_errno
