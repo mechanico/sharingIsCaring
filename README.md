@@ -9,13 +9,13 @@ $ sudo pip install -r requirements.txt
 ```
 You're ready to go!
 
-##Usage: 
+Usage: 
 
 ```
 $ twonky.py [IP Adress] [port]
 ```
 
-Example Usage:
+Example:
 
 ```
 $ python twonky.py XXX.XXX.XXX.XXX 9443
