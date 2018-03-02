@@ -1,14 +1,10 @@
 # sharingIsCaring
-##Install:
+Install:
 ```
 $ git clone https://github.com/mechanico/sharingIsCaring.git
-```
-Move into folder:
-```
+
 $ cd sharingIsCaring
-```
-Install dependicies:
-```
+
 $ sudo pip install -r requirements.txt
 ```
 You're ready to go!
