@@ -1,6 +1,5 @@
 # sharingIsCaring
 Install:
-Grab .git repository:
 ```
 $ git clone https://github.com/mechanico/sharingIsCaring.git
 ```
