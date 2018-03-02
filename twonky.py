@@ -1,16 +1,8 @@
 import urllib3
 import sys
 import socket
-try:
-        import requests
-except:
-        print "requests not found! Run $ pip install requests"
-        sys.exit()
-try:
-        from colorama import init, Fore
-except:
-        print "Colorama not found! Run $ pip install colorama"
-        sys.exit()
+import requests
+from colorama import init, Fore
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init(autoreset=True)
