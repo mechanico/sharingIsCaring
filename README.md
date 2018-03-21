@@ -13,6 +13,21 @@ Usage:
 
 ```
 $ twonky.py [IP Adress] [port]
+https://www.shodan.io/host/[IP Adress]
+*** Port [port] opened ***
+Run Twonky browser on port [port] [Y, N]? [Y] y
+*** Get Serverdetails from Twonky ***
+Server Name: TwonkyMedia [piranhacloud]
+Serverplatform: qnap_marvell_6281::qnap-ts219-oem
+Pictures shared: 34743
+Videos shared: 1804
+Pictures shared: 235592
+Videos shared: 7348
+Twonky Version: 8.2.1
+Build date: 02/08/2016 (mm/dd/yyyy)
+*** 'contentbase' path set to '/'' ***
+path nr: [enter directory number] [delimiter "/"]
+------------------------------
 ```
 
 * The "path nr" is e.g. 001, 002, ...
