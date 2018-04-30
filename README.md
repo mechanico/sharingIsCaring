@@ -1,5 +1,38 @@
 # sharingIsCaring
-Install:
+## Background information
+This is a GitHub repository keeping all relevant information about CVE-2018-7171.
+
+CVE-2018-7171 represents a directory/file traversal vulnerability in TwonkyMedia Server 
+version 7.0.11-8.5. Exploiting this vulnerability allows an attacker to list all files
+located on the device that is running the TwonkyMedia Server. Furthermore, an attacker is
+able to download all media files (Pictures, Videos, Music) from a device after exploiting
+this vulnerability. To exploit this vulnerability TwonkyMedia Server must not be protected 
+by a password (which is the default setup).
+
+Since a huge amount, around 24'000 TwonkyMedia Server instances are reachable via the internet
+the researcher decided to publish this vulnerability.
+
+Maybe you don't know that TwonkyMedia Server is running on your device nor you know that it's
+exposed in the internet. This is due to the fact that TwonkyMedia Server is pre installed on
+many NAS devices. If your router configuration automatically forwards the port (e.g. 9000) 
+because it's a DLNA share your probably owned.
+
+If your devices are affected by the vulnerability, expect all files on your device as no longer 
+private.
+
+Please make sure to switch off or protect your TwonkyMedia Server with a password, because no
+fix for this vulnerability is available. 
+
+## About
+
+<b>twonky.py</b>, can be used to comfortably browse devices running TwonkyMedia Server. 
+Also, a feature is implemented which checks files and directory names against a built-in 
+extensible wordlist for keywords e.g. wallet. Furthermore, interesting system information
+are requested and presented to the user.
+
+<b>downloadFiles.py</b>, can be used to perform bulk downloads of TwonkyMedia Server indexed directories.
+
+## Installation
 ```
 $ git clone https://github.com/mechanico/sharingIsCaring.git
 
@@ -9,7 +42,7 @@ $ sudo pip install -r requirements.txt
 ```
 You're ready to go!
 
-Usage: 
+## Usage 
 
 ```
 $ twonky.py [IP Adress] [port]
@@ -30,6 +63,7 @@ path nr: [enter directory number] [delimiter "/"]
 ------------------------------
 ```
 
+## Explanation of output
 * The "path nr" is e.g. 001, 002, ...
 * To browse through directories use "/" as delimiter, e.g. 005/091
 
@@ -41,8 +75,7 @@ path nr: [enter directory number] [delimiter "/"]
 
 * If a Keyword is discovered the line will be colored "RED"
 
-Example:
-
+## Example usage
 ```
 $ python twonky.py xxx.xxx.xxx.xxx 9000
 https://www.shodan.io/host/xxx.xxx.xxx.xxx
