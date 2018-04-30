@@ -4,20 +4,20 @@ This is a GitHub repository keeping all relevant information about CVE-2018-7171
 
 CVE-2018-7171 represents a directory/file traversal vulnerability in TwonkyMedia Server 
 version 7.0.11-8.5. Exploiting this vulnerability allows an attacker to list all files
-located on the device that is running the TwonkyMedia Server. Furthermore, an attacker is
-able to download all media files (Pictures, Videos, Music) from a device after exploiting
+located on the device, that is running the TwonkyMedia Server. Furthermore, an attacker is
+able to download all media files (pictures, videos, and music) from a device after exploiting
 this vulnerability. To exploit this vulnerability TwonkyMedia Server must not be protected 
 by a password (which is the default setup).
 
-Since a huge amount, around 24'000 TwonkyMedia Server instances are reachable via the internet
+Since a huge amount, around 24'000 TwonkyMedia Server instances, are reachable via the internet
 the researcher decided to publish this vulnerability.
 
 Maybe you don't know that TwonkyMedia Server is running on your device nor you know that it's
-exposed in the internet. This is due to the fact that TwonkyMedia Server is pre installed on
+exposed in the internet. This is due to the fact that TwonkyMedia Server is pre-installed on
 many NAS devices. If your router configuration automatically forwards the port (e.g. 9000) 
-because it's a DLNA share your probably owned.
+because it's a DLNA share, you're probably owned.
 
-If your devices are affected by the vulnerability, expect all files on your device as no longer 
+If your devices are affected by this vulnerability, expect all files on your device as no longer 
 private.
 
 Please make sure to switch off or protect your TwonkyMedia Server with a password, because no
@@ -25,12 +25,12 @@ fix for this vulnerability is available.
 
 ## About
 
-<b>twonky.py</b>, can be used to comfortably browse devices running TwonkyMedia Server. 
-Also, a feature is implemented which checks files and directory names against a built-in 
-extensible wordlist for keywords e.g. wallet. Furthermore, interesting system information
-are requested and presented to the user.
+<b>twonky.py</b> can be used to comfortably browse devices running TwonkyMedia Server. 
+Also, a feature is implemented which checks file and directory names against a built-in 
+extensible wordlist for keywords e.g. "wallet". Furthermore, interesting system information
+is requested and presented to the user.
 
-<b>downloadFiles.py</b>, can be used to perform bulk downloads of TwonkyMedia Server indexed directories.
+<b>downloadFiles.py</b> can be used to perform bulk downloads of TwonkyMedia Server indexed directories.
 
 ## Installation
 ```
