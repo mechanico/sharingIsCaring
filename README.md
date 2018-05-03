@@ -34,7 +34,7 @@ Running twonky.py for attacking targets without prior mutual consent is illegal.
 responsibility to obey all applicable local, state and federal laws.
 
 ## Disclosure timeline
-2018-01-20 Vulnerability discovered
+2018-01-20 Vulnerability discovered  
 2018-03-28 Security advisory released
 
 ## About the PoC's
