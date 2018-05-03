@@ -79,7 +79,7 @@ Running <b>twonky.py [IP ADRESS] [PORT]</b>, will set the contentbase Parameter 
 to /../ that allows from now on the discovery, indexing and download of all media files available on the 
 device and connected peripherals, e.g. USB drives.
 
-<img src="screenshots/twonkypy_usage_1.png" width="50%" height="50%">
+<img src="screenshots/twonkypy_usage_1.png" width="60%" height="60%">
 
 ### Explanation of output
 * The "path nr" is e.g. 001, 002, ...
